@@ -3,6 +3,8 @@
 ##Layout of the application##
 
 ###Radio script###
+Responsible for playing music from an internet stream
+
 * Use gstreamer to play an external URL
 * Use DBus to listen for messages
     * Listen for message to shutdown (Unix way would be to have a PID file)
@@ -13,6 +15,11 @@
 * Is this script a daemon or does it kill itself when the radio is not playing?
 
 ###Alarm script###
+Responsible for kicking off the radio script. This is what the cron script will call.
+
+###Alarm management script###
+Responsible for maintaining the crontab which will kick start the alarm script.
+
 * Run via cron, probably run multiple times a day (once an hour?)
 * Connects to Google Calendar to retrieve changes to the alarm clock events.
     * https://developers.google.com/google-apps/calendar/
@@ -22,7 +29,10 @@
 * Calendar event should have radio station on it
 
 ###LCD script###
+Responsible for managing the LCD screen and also the buttons around the LCD.
+
 * http://www.adafruit.com/products/1110
+* Should the management of the buttons be in this script or a separate one?
 * Adafruit custom code or LCDproc?
     * Does Adafruit support LCDproc? (probably not for that product)
 * Regularly updates LCD - possibly have to update the time as well?
