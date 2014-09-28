@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}PiClock{% endblock %}
+{% block header %}
+<h1>Authorise PiClock to access Google Calendar</h1>
+{% endblock %}
+{% block content %}
+        <ol>
+            <li><a href="{{ url|safe }}" target="_blank">Open up this link in a new tab to generate a code.</a></li>
+            <li>Enter this code into the form below and click submit.</li>
+        </ol>
+        <form action="/authorise" method="post" role="form">
+            <input type="hidden" name="to" value="{{ redirect_to }}">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <input type="text" name="code" placeholder="code" required="true" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+        </form>
+
+{% endblock %}

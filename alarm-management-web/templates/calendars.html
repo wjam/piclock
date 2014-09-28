@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Calendar selection</title>
-    </head>
-
-    <body>
-        <ul>
-            {% for c in calendars %}
-                <li>{{ c }}</li>
+{% extends "base.html" %}
+{% block title %}PiClock - Calendar selection{% endblock %}
+{% block header %}
+<h1>Calendar to store alarm events in</h1>
+{% endblock %}
+{% block content %}
+        <p>
+            Please select which calendar should be used to store the alarm events.
+            You may wish to create a new calendar for this.
+        </p>
+        <form action="#" method="post" role="form">
+            {% for (id,name) in calendars %}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="calendar" value="{{ id }}">
+                    {{ name }}
+                </label>
+            </div>
             {% endfor %}
-        </ul>
-    </body>
-
-</html>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+{% endblock %}
