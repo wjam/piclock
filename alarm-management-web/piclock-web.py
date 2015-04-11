@@ -12,7 +12,9 @@ from oauth2client.client import OAuth2WebServerFlow
 
 ETC_DIR = os.path.join(os.path.dirname(__file__), '../etc')
 
-CONFIG = json.load(open(os.path.join(ETC_DIR, 'config.json'), 'r'))
+CONFIG_FILE = os.path.join(ETC_DIR, 'config.json')
+
+CONFIG = json.load(open(CONFIG_FILE, 'r'))
 
 FLOW = OAuth2WebServerFlow(
     client_id=CONFIG['client_id'],
@@ -47,24 +49,29 @@ def authorise():
 
     return flask.redirect(flask.url_for(flask.request.form['to']))
 
-@app.route("/select_calendar")
+@app.route("/select_calendar", methods=['GET', 'POST'])
 def select_calendar():
+    if flask.request.method == 'GET':
+        credentials = CREDENTIALS_STORE.get()
+        if credentials is None or credentials.invalid is True:
+            return flask.redirect(flask.url_for('authorise', to='select_calendar'))
 
-    credentials = CREDENTIALS_STORE.get()
-    if credentials is None or credentials.invalid is True:
-        return flask.redirect(flask.url_for('authorise', to='select_calendar'))
+        http = credentials.authorize(httplib2.Http())
 
-    http = credentials.authorize(httplib2.Http())
+        service = \
+            build(serviceName='calendar', version='v3', http=http, developerKey=CONFIG['developer_key'])
 
-    service = \
-        build(serviceName='calendar', version='v3', http=http, developerKey=CONFIG['developer_key'])
+        calendars = service.calendarList().list().execute()
 
-    calendars = service.calendarList().list().execute()
+        template_data = {
+            'calendars': [(c['id'], c['summary']) for c in calendars['items']]
+        }
+        return render_template('calendars.html', **template_data)
 
-    template_data = {
-        'calendars': [(c['id'], c['summary']) for c in calendars['items']]
-    }
-    return render_template('calendars.html', **template_data)
+    CONFIG['calendar'] = flask.request.form['calendar']
+    json.dump(CONFIG, open(CONFIG_FILE, 'w'))
+    return flask.redirect('/')
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True)

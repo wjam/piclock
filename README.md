@@ -58,3 +58,9 @@ Responsible for managing the LCD screen and also the buttons around the LCD.
 ##Tools required##
 * Soldering Iron
 * Solder sucker
+
+````
+sudo pip install --upgrade google-api-python-client
+sudo pip install --upgrade python-gflags
+sudo pip install --upgrade python-crontab
+````

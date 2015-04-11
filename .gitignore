@@ -1,5 +1,6 @@
 # Sensitive files
 etc/
+virtenv/
 
 # Created by https://www.gitignore.io
 
