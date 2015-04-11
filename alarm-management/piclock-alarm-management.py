@@ -86,6 +86,7 @@ for google in google_events:
     cron_event = get_cron_event(google)
     if cron_event is not None:
         # Found an event; update it and then remove it from further consideration
+        # TODO check that the cron_event is up to date (radio, command)
         cron_events.remove(cron_event)
     else:
         # No corresponding event found; add a new one
